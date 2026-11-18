@@ -55,24 +55,49 @@ def get_price(model: str) -> ModelPrice:
 
 
 def calculate_cost(usage: Mapping[str, Any]) -> Decimal:
-    """
-    Cost in USD for one call, from the dict returned by extract_usage().
+    """Calculate USD token cost using the configured model rates."""
 
-    Cached input tokens are a subset of input tokens and are billed at the
-    cached rate. Reasoning tokens are already included in output tokens, so
-    they are not added again.
-    """
+    # A missing or unknown model must fail instead of costing zero.
     price = get_price(usage["requested_model"])
 
-    input_tokens = int(usage["input_tokens"])
-    output_tokens = int(usage["output_tokens"])
-    cached_tokens = min(int(usage.get("cached_input_tokens", 0)), input_tokens)
+    # Input and output counts are required.
+    # Missing fields raise KeyError rather than defaulting to zero.
+    input_tokens = _validate_token_count(
+        usage["input_tokens"],
+        "input_tokens",
+    )
+
+    output_tokens = _validate_token_count(
+        usage["output_tokens"],
+        "output_tokens",
+    )
+
+    # Cached usage is optional in our normalized usage contract.
+    reported_cached_tokens = _validate_token_count(
+        usage.get("cached_input_tokens", 0),
+        "cached_input_tokens",
+    )
+
+    # Preserve our existing policy: cached input cannot exceed input.
+    cached_tokens = min(reported_cached_tokens, input_tokens)
     uncached_tokens = input_tokens - cached_tokens
 
-    cost = (
+    # Reasoning tokens are already included in output_tokens.
+    # total_tokens is also not an additional billable category.
+    return (
         uncached_tokens * price.input_per_1m
         + cached_tokens * price.cached_input_per_1m
         + output_tokens * price.output_per_1m
     ) / PER_MILLION
 
-    return cost
+def _validate_token_count(value: Any, field: str) -> int:
+    """Require a non-negative integer without silently converting values."""
+
+    # bool is a subclass of int, so use an exact type check.
+    # This rejects True, floats, numeric strings, and None.
+    if type(value) is not int or value < 0:
+        raise ValueError(
+            f"{field} must be a non-negative integer"
+        )
+
+    return value
