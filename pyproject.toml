@@ -33,6 +33,7 @@ module-root="src"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--strict-markers"
+pythonpath = ["."]
 markers = [
     "live: makes real, billable provider requests",
 ]

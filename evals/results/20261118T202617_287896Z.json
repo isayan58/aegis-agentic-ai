@@ -1,0 +1,357 @@
+{
+  "dataset": "v1.jsonl",
+  "dataset_sha256": "ab7deb24f74bc3c4e5fed2cdee8a9fbfde1136627d4ea53f4a03d296dbef6f42",
+  "started_at": "2026-11-18T20:26:17.287896+00:00",
+  "finished_at": "2026-11-18T20:26:17.290473+00:00",
+  "duration_seconds": 0.002577,
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "results": [
+    {
+      "id": "football_research",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          0.6
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          0.6
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "football_compare",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "football_rank",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_research",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          240.0
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          240.0
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_compare",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_rank",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          0.7
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          0.7000000000000001
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_factors",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "factors"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "factors"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_period",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.time_period"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.time_period"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_coverage",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.coverage"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.coverage"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_ranking_basis",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "ranking_basis"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "ranking_basis"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "compare_one_subject",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "requires at least two subjects",
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Comparison or ranking requires at least two subjects"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "duplicate_subjects",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "Subjects must be unique",
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Subjects must be unique"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "empty_objective",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "string_too_short",
+        "error_contains": "at least 1 character",
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "string_too_short",
+            "location": [
+              "objective"
+            ],
+            "message": "String should have at least 1 character"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "unknown_source",
+      "category": "reference",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "unknown source",
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Evidence ev_demo references unknown source src_missing"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "unknown_evidence",
+      "category": "reference",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "unknown evidence",
+        "tool_outputs": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Finding finding_demo references unknown evidence: ['ev_missing']"
+          }
+        ]
+      },
+      "failures": []
+    }
+  ]
+}
