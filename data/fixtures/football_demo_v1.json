@@ -1,0 +1,14 @@
+{
+  "title": "Fictional football statistics for testing",
+  "dataset_ref": "football_demo_v1",
+  "is_test_data": true,
+  "kind": "football",
+  "rows": [
+    {"subject": "Player A", "season": "2024", "competition": "Demo League", "matches": 20, "minutes": 1800, "goals": 12, "assists": 6, "key_passes": 40},
+    {"subject": "Player A", "season": "2025", "competition": "Demo League", "matches": 20, "minutes": 1800, "goals": 14, "assists": 8, "key_passes": 50},
+    {"subject": "Player B", "season": "2024", "competition": "Demo League", "matches": 20, "minutes": 1500, "goals": 10, "assists": 9, "key_passes": 55},
+    {"subject": "Player B", "season": "2025", "competition": "Demo League", "matches": 20, "minutes": 1600, "goals": 11, "assists": 10, "key_passes": 60},
+    {"subject": "Player C", "season": "2024", "competition": "Demo League", "matches": 18, "minutes": 1200, "goals": 8, "assists": 4, "key_passes": 30},
+    {"subject": "Player C", "season": "2025", "competition": "Demo League", "matches": 19, "minutes": 1400, "goals": 9, "assists": 5, "key_passes": 35}
+  ]
+}

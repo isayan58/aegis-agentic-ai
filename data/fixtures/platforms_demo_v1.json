@@ -1,0 +1,11 @@
+{
+  "title": "Fictional platform specifications for testing",
+  "dataset_ref": "platforms_demo_v1",
+  "is_test_data": true,
+  "kind": "platforms",
+  "rows": [
+    {"subject": "Vendor A", "storage_usd_tb_month": 20, "compute_usd_hour": 2, "certifications": ["DEMO-SEC-A"], "sla_percent": 99.9, "regions": ["Demo East", "Demo West"]},
+    {"subject": "Vendor B", "storage_usd_tb_month": 25, "compute_usd_hour": 1.5, "certifications": ["DEMO-SEC-A", "DEMO-SEC-B"], "sla_percent": 99.95, "regions": ["Demo East", "Demo West", "Demo North"]},
+    {"subject": "Vendor C", "storage_usd_tb_month": 15, "compute_usd_hour": 3, "certifications": ["DEMO-SEC-B"], "sla_percent": 99.5, "regions": ["Demo East"]}
+  ]
+}
