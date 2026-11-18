@@ -7,10 +7,10 @@ Usage around every model call:
     response = model.invoke(...)
     tracker.record(extract_usage(response, ...))   # after: adds the cost
 
-check() cannot know what the next call will cost, so the final call of a run
-can take spending slightly past the cap. The cap stops further calls; it does
-not guarantee an exact ceiling. Keep the cap a little below what you can
-afford to lose.
+check() blocks new calls after recorded spending reaches the limit.
+It does not reserve funds for calls in progress. One expensive call,
+or multiple concurrent calls, can exceed the limit before usage is
+recorded. This is a spending cutoff, not a strict reservation-based cap.
 
 The tracker is thread-safe, because parallel graph branches will share it.
 Only metadata is logged: never prompts, responses or keys.
@@ -19,7 +19,7 @@ Only metadata is logged: never prompts, responses or keys.
 import logging
 import threading
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import Any, Mapping
 
 from aegis.llm.pricing import calculate_cost
@@ -44,9 +44,18 @@ class CallRecord:
 
 class BudgetTracker:
     def __init__(self, limit_usd: Decimal | str | int) -> None:
-        limit = Decimal(str(limit_usd))
-        if limit <= 0:
-            raise ValueError("Budget limit must be greater than zero")
+        # Reject malformed values, infinity, NaN, zero, and negatives.
+        try:
+            limit = Decimal(str(limit_usd))
+        except (InvalidOperation, ValueError, TypeError):
+            raise ValueError(
+                "Budget limit must be a finite positive number"
+            ) from None
+
+        if not limit.is_finite() or limit <= 0:
+            raise ValueError(
+                "Budget limit must be a finite positive number"
+            )
 
         self._limit = limit
         self._spent = Decimal(0)

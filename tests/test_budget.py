@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 import logging
 import threading
 from decimal import Decimal
@@ -128,17 +129,30 @@ def test_non_positive_limit_rejected(limit):
 
 
 def test_concurrent_records_are_not_lost():
-    tracker = BudgetTracker("100")
-    usage = make_usage("gpt-5-mini", input_tokens=1_000, output_tokens=500)
+    """Eight workers must record all 400 calls without losing updates."""
 
-    threads = [
-        threading.Thread(target=lambda: [tracker.record(usage) for _ in range(50)])
-        for _ in range(8)
-    ]
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
+    tracker = BudgetTracker("100")
+
+    usage = make_usage(
+        "gpt-5-mini",
+        input_tokens=1_000,
+        output_tokens=500,
+    )
+
+    def record_batch():
+        # Each worker records 50 completed calls.
+        for _ in range(50):
+            tracker.record(usage)
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [
+            executor.submit(record_batch)
+            for _ in range(8)
+        ]
+
+        # Calling result() propagates worker exceptions into the test.
+        for future in futures:
+            future.result()
 
     assert len(tracker.calls) == 400
     assert tracker.spent_usd == Decimal("0.00125") * 400
@@ -172,11 +186,119 @@ def _settings(**overrides):
     return Settings(**values)
 
 
-def test_budget_limit_defaults_and_overrides():
+def test_budget_limit_defaults_and_overrides(monkeypatch):
+    """Test the default without interference from the shell environment."""
+
+    monkeypatch.delenv("BUDGET_LIMIT_USD", raising=False)
+
     assert _settings().budget_limit_usd == Decimal("1.00")
-    assert _settings(budget_limit_usd="0.50").budget_limit_usd == Decimal("0.50")
+
+    assert _settings(
+        budget_limit_usd="0.50"
+    ).budget_limit_usd == Decimal("0.50")
 
 
 def test_budget_limit_must_be_positive():
     with pytest.raises(ValueError):
         _settings(budget_limit_usd="0")
+
+@pytest.mark.parametrize(
+    "limit",
+    ["NaN", "Infinity", "-Infinity", "not-a-number"],
+)
+def test_invalid_budget_limits_are_rejected(limit):
+    """The cutoff must always be a finite positive amount."""
+
+    with pytest.raises(ValueError, match="finite positive"):
+        BudgetTracker(limit)
+
+
+def test_failed_cost_calculation_does_not_change_tracker():
+    """An unpriced call must fail loudly without corrupting totals."""
+
+    tracker = BudgetTracker("1.00")
+
+    with pytest.raises(UnknownModelPriceError):
+        tracker.record(
+            make_usage("unconfigured-model", input_tokens=100)
+        )
+
+    assert tracker.spent_usd == Decimal("0")
+    assert tracker.remaining_usd == Decimal("1.00")
+    assert tracker.calls == ()
+
+
+def test_budget_exhaustion_emits_warning(caplog):
+    """Reaching the cutoff should be observable in logs."""
+
+    tracker = BudgetTracker("0.25")
+
+    with caplog.at_level(
+        logging.WARNING,
+        logger="aegis.llm.budget",
+    ):
+        tracker.record(
+            make_usage("gpt-5-mini", input_tokens=1_000_000)
+        )
+
+    assert "budget_exhausted" in caplog.text
+
+
+def test_extra_sensitive_fields_are_not_logged(caplog):
+    """Only selected accounting fields should reach the logs."""
+
+    tracker = BudgetTracker("1.00")
+
+    usage = make_usage(
+        "gpt-5-mini",
+        input_tokens=100,
+        output_tokens=20,
+    )
+
+    # These extra fields must never be copied wholesale into logs.
+    usage["prompt"] = "PRIVATE-PROMPT-SENTINEL"
+    usage["api_key"] = "PRIVATE-KEY-SENTINEL"
+    usage["response"] = "PRIVATE-RESPONSE-SENTINEL"
+
+    with caplog.at_level(
+        logging.INFO,
+        logger="aegis.llm.budget",
+    ):
+        tracker.record(usage)
+
+    assert "llm_call" in caplog.text
+    assert "PRIVATE-PROMPT-SENTINEL" not in caplog.text
+    assert "PRIVATE-KEY-SENTINEL" not in caplog.text
+    assert "PRIVATE-RESPONSE-SENTINEL" not in caplog.text
+
+
+def test_completed_inflight_calls_are_recorded_after_exhaustion():
+    """Already incurred costs must be recorded even after the cutoff."""
+
+    tracker = BudgetTracker("0.001")
+
+    usage = make_usage(
+        "gpt-5-mini",
+        input_tokens=1_000,
+        output_tokens=500,
+    )
+
+    # Simulate two calls that started before either one finished.
+    tracker.check()
+    tracker.check()
+
+    tracker.record(usage)
+    tracker.record(usage)
+
+    assert len(tracker.calls) == 2
+    assert tracker.spent_usd == Decimal("0.00250")
+    assert tracker.remaining_usd == Decimal("0")
+
+    # A subsequent call must now be blocked.
+    with pytest.raises(BudgetExceededError):
+        tracker.check()
+
+@pytest.mark.parametrize("limit", ["NaN", "Infinity", "-Infinity"])
+def test_settings_reject_non_finite_budget(limit):
+    with pytest.raises(ValueError):
+        _settings(budget_limit_usd=limit)

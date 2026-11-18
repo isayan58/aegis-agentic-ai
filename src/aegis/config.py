@@ -24,8 +24,12 @@ class Settings(BaseSettings):
     azure_openai_base_url: str
     azure_openai_deployment: str
 
-    # Spending cap for one run, in USD.
-    budget_limit_usd: Decimal = Field(default=Decimal("1.00"), gt=0)
+    # Spending cutoff for one research run, measured in USD.
+    budget_limit_usd: Decimal = Field(
+        default=Decimal("1.00"),
+        gt=0,
+        allow_inf_nan=False,
+    )
 
     @field_validator("openai_api_key", "azure_openai_api_key")
     @classmethod
