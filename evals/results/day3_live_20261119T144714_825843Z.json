@@ -1,0 +1,339 @@
+{
+  "experiment": "A",
+  "dataset_sha256": "71be24d46fd0b20a83c8901f49aa4c5956e8209f46b47a1dc8759550b9ba5fac",
+  "started_at": "2026-11-19T14:47:14.825843+00:00",
+  "selected_cases": [
+    "d3_player_a_scoring",
+    "d3_player_b_scoring",
+    "d3_player_c_scoring",
+    "d3_vendor_a_operating_cost",
+    "d3_vendor_b_operating_cost"
+  ],
+  "budget_cutoff_usd": "0.10",
+  "recorded_spend_usd": "0.00786660",
+  "results": [
+    {
+      "case_id": "d3_player_a_scoring",
+      "status": "validated",
+      "expected_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "actual_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "tool_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "sequence_exact": true,
+        "expected_calls": 2,
+        "actual_calls": 2,
+        "matched_calls": 2
+      },
+      "report": {
+        "summary": "Goals per 90 for Player A in the Demo League during 2025, computed from sourced evidence.",
+        "mode": "research",
+        "subjects": [
+          "Player A"
+        ],
+        "comparison_rows": [
+          {
+            "subject": "Player A",
+            "factor": "scoring",
+            "value": 0.7,
+            "unit": "goals per 90",
+            "evidence_ids": [
+              "ev_42aa13f70da1973f10be907aa173e5b20984b0b3f94dd6d6671edb4fa10a6519"
+            ]
+          }
+        ],
+        "ranking": [],
+        "findings": [
+          {
+            "finding_id": "f1",
+            "subject": "Player A",
+            "factor": "scoring",
+            "claim": "Player A scored 14 goals in 1,800 minutes in the Demo League during 2025, corresponding to 0.7 goals per 90 minutes.",
+            "claim_type": "reported_fact",
+            "evidence_ids": [
+              "ev_42aa13f70da1973f10be907aa173e5b20984b0b3f94dd6d6671edb4fa10a6519"
+            ],
+            "limitations": [],
+            "verification_status": "unverified"
+          }
+        ],
+        "limitations": [
+          "Report uses a single dataset (football_demo_v1) with fictional test data; findings are unverified and labelled as such.",
+          "Evidence covers only the Demo League and the 2025 season; other competitions or aggregated seasons were not included."
+        ],
+        "citations": [
+          "src_football_demo_v1"
+        ],
+        "status": "completed"
+      },
+      "cost_usd": "0.00153000",
+      "model_calls": 3
+    },
+    {
+      "case_id": "d3_player_b_scoring",
+      "status": "validated",
+      "expected_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "actual_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "tool_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "sequence_exact": true,
+        "expected_calls": 2,
+        "actual_calls": 2,
+        "matched_calls": 2
+      },
+      "report": {
+        "summary": "Goals per 90 minutes for Player B in Demo League during 2025 (research mode).",
+        "mode": "research",
+        "subjects": [
+          "Player B"
+        ],
+        "comparison_rows": [
+          {
+            "subject": "Player B",
+            "factor": "scoring",
+            "value": 0.61875,
+            "unit": "goals per 90",
+            "evidence_ids": [
+              "ev_ca42f0862bb7a926e9972fb79e7e95b69a9621a0d45352a94d1c624fc84ef972"
+            ]
+          }
+        ],
+        "ranking": [],
+        "findings": [
+          {
+            "finding_id": "f1",
+            "subject": "Player B",
+            "factor": "scoring",
+            "claim": "Player B scored 11 goals in 1600 minutes in the Demo League during 2025, corresponding to 0.61875 goals per 90 minutes.",
+            "claim_type": "reported_fact",
+            "evidence_ids": [
+              "ev_ca42f0862bb7a926e9972fb79e7e95b69a9621a0d45352a94d1c624fc84ef972"
+            ],
+            "limitations": [
+              "Evidence is from a fictional test dataset (src_football_demo_v1) and is unverified."
+            ],
+            "verification_status": "unverified"
+          }
+        ],
+        "limitations": [
+          "Report uses only evidence returned by the dataset lookup for Player B scoring in 2025; no additional sources were available.",
+          "Evidence locator indicates Demo League coverage and 2025 time period; scope restricted to that.",
+          "Findings remain unverified because dataset is test data."
+        ],
+        "citations": [
+          "src_football_demo_v1"
+        ],
+        "status": "completed"
+      },
+      "cost_usd": "0.00157475",
+      "model_calls": 3
+    },
+    {
+      "case_id": "d3_player_c_scoring",
+      "status": "validated",
+      "expected_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "actual_tools": [
+        "lookup_evidence_tool",
+        "per_90_tool"
+      ],
+      "tool_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "sequence_exact": true,
+        "expected_calls": 2,
+        "actual_calls": 2,
+        "matched_calls": 2
+      },
+      "report": {
+        "summary": "Goals per 90 minutes for Player C in Demo League, 2025.",
+        "mode": "research",
+        "subjects": [
+          "Player C"
+        ],
+        "comparison_rows": [
+          {
+            "subject": "Player C",
+            "factor": "scoring",
+            "value": 0.5785714285714286,
+            "unit": "goals per 90",
+            "evidence_ids": [
+              "ev_7686e13a4a83ca943dd6c6b7f12f204b44eb2f842b4cc8b16c4a8f1eca8b90bd"
+            ]
+          }
+        ],
+        "ranking": [],
+        "findings": [
+          {
+            "finding_id": "f1",
+            "subject": "Player C",
+            "factor": "scoring",
+            "claim": "Player C scored 9 goals in 1400 minutes in the Demo League during 2025, equivalent to approximately 0.579 goals per 90 minutes.",
+            "claim_type": "reported_fact",
+            "evidence_ids": [
+              "ev_7686e13a4a83ca943dd6c6b7f12f204b44eb2f842b4cc8b16c4a8f1eca8b90bd"
+            ],
+            "limitations": [],
+            "verification_status": "unverified"
+          }
+        ],
+        "limitations": [
+          "Data limited to the provided Demo League dataset (football_demo_v1).",
+          "Only evidence for 2025 was used; earlier seasons present but outside scope.",
+          "Evidence is marked as test/fictional dataset."
+        ],
+        "citations": [
+          "src_football_demo_v1"
+        ],
+        "status": "completed"
+      },
+      "cost_usd": "0.00154175",
+      "model_calls": 3
+    },
+    {
+      "case_id": "d3_vendor_a_operating_cost",
+      "status": "validated",
+      "expected_tools": [
+        "lookup_evidence_tool",
+        "calculator_tool"
+      ],
+      "actual_tools": [
+        "lookup_evidence_tool",
+        "calculator_tool"
+      ],
+      "tool_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "sequence_exact": true,
+        "expected_calls": 2,
+        "actual_calls": 2,
+        "matched_calls": 2
+      },
+      "report": {
+        "summary": "Calculate total price for 2 TB-month storage and 100 compute hours for Vendor A (Fictional v1 snapshot). Provide operating cost evidence and unverified findings.",
+        "mode": "research",
+        "subjects": [
+          "Vendor A"
+        ],
+        "comparison_rows": [
+          {
+            "subject": "Vendor A",
+            "factor": "operating cost",
+            "value": "storage_usd_tb_month: 20.0; compute_usd_hour: 2.0",
+            "unit": "USD",
+            "evidence_ids": [
+              "ev_036f9d325876f88a499db81dd8431128c26eb335feaa5b29ab41de674831a036"
+            ]
+          }
+        ],
+        "ranking": [],
+        "findings": [
+          {
+            "finding_id": "f1",
+            "subject": "Vendor A",
+            "factor": "operating cost",
+            "claim": "Vendor A charges $20.0 per TB-month of storage and $2.0 per compute hour (Fictional v1 snapshot).",
+            "claim_type": "reported_fact",
+            "evidence_ids": [
+              "ev_036f9d325876f88a499db81dd8431128c26eb335feaa5b29ab41de674831a036"
+            ],
+            "limitations": [
+              "Data is test/fictional dataset (platforms_demo_v1).",
+              "Costs are from the specified Fictional v1 snapshot and may not reflect real offerings."
+            ],
+            "verification_status": "unverified"
+          }
+        ],
+        "limitations": [
+          "Only one evidence entry available from the provided fictional dataset.",
+          "Scope limited to 'Fictional v1 snapshot' and specified coverage (2 TB-month storage and 100 compute hours)."
+        ],
+        "citations": [
+          "src_platforms_demo_v1"
+        ],
+        "status": "completed"
+      },
+      "cost_usd": "0.00163555",
+      "model_calls": 3
+    },
+    {
+      "case_id": "d3_vendor_b_operating_cost",
+      "status": "validated",
+      "expected_tools": [
+        "lookup_evidence_tool",
+        "calculator_tool"
+      ],
+      "actual_tools": [
+        "lookup_evidence_tool",
+        "calculator_tool"
+      ],
+      "tool_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "sequence_exact": true,
+        "expected_calls": 2,
+        "actual_calls": 2,
+        "matched_calls": 2
+      },
+      "report": {
+        "summary": "Computed total price for Vendor B operating cost for requested usage and provided evidence.",
+        "mode": "research",
+        "subjects": [
+          "Vendor B"
+        ],
+        "comparison_rows": [
+          {
+            "subject": "Vendor B",
+            "factor": "operating cost",
+            "value": "compute_usd_hour: 1.5; storage_usd_tb_month: 25.0",
+            "unit": "USD (per unit)",
+            "evidence_ids": [
+              "ev_941a2b38cc4a74feaf8b3b557adbc15a506815915c75c4266e8026c6e48551c6"
+            ]
+          }
+        ],
+        "ranking": [],
+        "findings": [
+          {
+            "finding_id": "f1",
+            "subject": "Vendor B",
+            "factor": "operating cost",
+            "claim": "Vendor B charges $1.50 per compute hour and $25.00 per TB-month of storage in the Fictional v1 snapshot.",
+            "claim_type": "reported_fact",
+            "evidence_ids": [
+              "ev_941a2b38cc4a74feaf8b3b557adbc15a506815915c75c4266e8026c6e48551c6"
+            ],
+            "limitations": [
+              "Data are from a fictional test dataset (platforms_demo_v1) and not validated against real vendor pricing."
+            ],
+            "verification_status": "unverified"
+          }
+        ],
+        "limitations": [
+          "Report uses only the provided Fictional v1 snapshot from platforms_demo_v1. No other sources were available in this run."
+        ],
+        "citations": [
+          "src_platforms_demo_v1"
+        ],
+        "status": "completed"
+      },
+      "cost_usd": "0.00158455",
+      "model_calls": 3
+    }
+  ]
+}

@@ -1,0 +1,903 @@
+{
+  "dataset": "v1.jsonl",
+  "dataset_sha256": "71be24d46fd0b20a83c8901f49aa4c5956e8209f46b47a1dc8759550b9ba5fac",
+  "started_at": "2026-11-19T14:35:26.175929+00:00",
+  "finished_at": "2026-11-19T14:35:26.176531+00:00",
+  "duration_seconds": 0.000602,
+  "total": 30,
+  "passed": 30,
+  "failed": 0,
+  "results": [
+    {
+      "id": "football_research",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          0.6
+        ],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          0.6
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "football_compare",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "football_rank",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_research",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          240.0
+        ],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          240.0
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_compare",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "platform_rank",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [
+          0.7
+        ],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [
+          0.7000000000000001
+        ],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_factors",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "factors"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "factors"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_period",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.time_period"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.time_period"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_coverage",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.coverage"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "scope.coverage"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "missing_ranking_basis",
+      "category": "clarification",
+      "passed": true,
+      "expected": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "ranking_basis"
+        ],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "clarification",
+        "clarification_fields": [
+          "ranking_basis"
+        ],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "compare_one_subject",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "requires at least two subjects",
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Comparison or ranking requires at least two subjects"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "duplicate_subjects",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "Subjects must be unique",
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Subjects must be unique"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "empty_objective",
+      "category": "invalid",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "string_too_short",
+        "error_contains": "at least 1 character",
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "string_too_short",
+            "location": [
+              "objective"
+            ],
+            "message": "String should have at least 1 character"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "unknown_source",
+      "category": "reference",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "unknown source",
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Evidence ev_demo references unknown source src_missing"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "unknown_evidence",
+      "category": "reference",
+      "passed": true,
+      "expected": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "error_type": "value_error",
+        "error_contains": "unknown evidence",
+        "tool_outputs": [],
+        "workers": [],
+        "tool_sequence": []
+      },
+      "actual": {
+        "outcome": "rejected",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": [
+          {
+            "type": "value_error",
+            "location": [],
+            "message": "Value error, Finding finding_demo references unknown evidence: ['ev_missing']"
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_a_scoring",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player A",
+            "scoring"
+          ],
+          [
+            "analysis",
+            "Player A",
+            "scoring"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "per_90_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_a_creativity",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player A",
+            "creativity"
+          ],
+          [
+            "analysis",
+            "Player A",
+            "creativity"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_a_availability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player A",
+            "availability"
+          ],
+          [
+            "analysis",
+            "Player A",
+            "availability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_b_scoring",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player B",
+            "scoring"
+          ],
+          [
+            "analysis",
+            "Player B",
+            "scoring"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "per_90_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_b_creativity",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player B",
+            "creativity"
+          ],
+          [
+            "analysis",
+            "Player B",
+            "creativity"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_b_availability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player B",
+            "availability"
+          ],
+          [
+            "analysis",
+            "Player B",
+            "availability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_c_scoring",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player C",
+            "scoring"
+          ],
+          [
+            "analysis",
+            "Player C",
+            "scoring"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "per_90_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_c_creativity",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player C",
+            "creativity"
+          ],
+          [
+            "analysis",
+            "Player C",
+            "creativity"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_player_c_availability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Player C",
+            "availability"
+          ],
+          [
+            "analysis",
+            "Player C",
+            "availability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_a_operating_cost",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor A",
+            "operating cost"
+          ],
+          [
+            "analysis",
+            "Vendor A",
+            "operating cost"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "calculator_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_a_reliability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor A",
+            "reliability"
+          ],
+          [
+            "analysis",
+            "Vendor A",
+            "reliability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_b_operating_cost",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor B",
+            "operating cost"
+          ],
+          [
+            "analysis",
+            "Vendor B",
+            "operating cost"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "calculator_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_b_reliability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor B",
+            "reliability"
+          ],
+          [
+            "analysis",
+            "Vendor B",
+            "reliability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_c_operating_cost",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor C",
+            "operating cost"
+          ],
+          [
+            "analysis",
+            "Vendor C",
+            "operating cost"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool",
+          "calculator_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    },
+    {
+      "id": "d3_vendor_c_reliability",
+      "category": "valid",
+      "passed": true,
+      "expected": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "error_type": null,
+        "error_contains": null,
+        "tool_outputs": [],
+        "workers": [
+          [
+            "evidence",
+            "Vendor C",
+            "reliability"
+          ],
+          [
+            "analysis",
+            "Vendor C",
+            "reliability"
+          ]
+        ],
+        "tool_sequence": [
+          "lookup_evidence_tool"
+        ]
+      },
+      "actual": {
+        "outcome": "accepted",
+        "clarification_fields": [],
+        "tool_outputs": [],
+        "errors": []
+      },
+      "failures": []
+    }
+  ]
+}
