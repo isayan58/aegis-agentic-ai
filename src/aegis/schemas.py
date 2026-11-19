@@ -227,3 +227,186 @@ class ResearchBundle(BaseModel):
                 )
 
         return self
+
+class ComparisonRow(BaseModel):
+    """One result for a subject and factor, linked to its evidence."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    subject: NonEmptyText
+    factor: NonEmptyText
+
+    # Support numerical results and descriptive results.
+    # Examples: 0.65 goals per 90 minutes, or "ISO 27001".
+    value: float | NonEmptyText
+    unit: NonEmptyText | None = None
+
+    # These reference EvidenceItem.evidence_id, not source IDs.
+    evidence_ids: list[NonEmptyText] = Field(min_length=1)
+
+
+class RankingEntry(BaseModel):
+    """A subject's position and score under the chosen ranking method."""
+
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    # Equal positions are permitted so ties can be represented.
+    position: int = Field(ge=1)
+    subject: NonEmptyText
+
+    # Keep the score scale flexible; the ranking method defines it.
+    score: float
+    evidence_ids: list[NonEmptyText] = Field(min_length=1)
+
+
+class FinalReport(BaseModel):
+    """The shared output contract for Aegis research architectures."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    summary: NonEmptyText
+    mode: Literal["research", "compare", "rank"]
+    subjects: list[NonEmptyText] = Field(min_length=1, max_length=5)
+
+    comparison_rows: list[ComparisonRow] = Field(default_factory=list)
+    ranking: list[RankingEntry] = Field(default_factory=list)
+    findings: list[ResearchFinding] = Field(default_factory=list)
+    limitations: list[NonEmptyText] = Field(default_factory=list)
+
+    # The report's bibliography references SourceRecord.source_id.
+    # Rows and findings reference the more specific evidence IDs.
+    citations: list[NonEmptyText] = Field(default_factory=list)
+
+    # "Completed" describes report production, not factual verification.
+    # "Degraded" means a report was produced with limitations.
+    status: Literal["completed", "degraded"]
+
+    @model_validator(mode="after")
+    def validate_report_structure(self):
+        """Check rules that can be evaluated without external evidence."""
+
+        subject_keys = [subject.casefold() for subject in self.subjects]
+        known_subjects = set(subject_keys)
+
+        if len(subject_keys) != len(known_subjects):
+            raise ValueError("Report subjects must be unique")
+
+        if self.mode in {"compare", "rank"} and len(self.subjects) < 2:
+            raise ValueError(
+                "Comparison or ranking requires at least two subjects"
+            )
+
+        # Research and comparison reports must not silently introduce
+        # a ranking that the user did not request.
+        if self.mode == "rank" and not self.ranking:
+            raise ValueError("Rank mode requires a ranking")
+
+        if self.mode != "rank" and self.ranking:
+            raise ValueError("Ranking is only allowed in rank mode")
+
+        # Every structured result must concern a declared subject.
+        results = [
+            *self.comparison_rows,
+            *self.ranking,
+            *self.findings,
+        ]
+
+        for result in results:
+            if result.subject.casefold() not in known_subjects:
+                raise ValueError(
+                    f"Unknown report subject: {result.subject}"
+                )
+
+            if len(result.evidence_ids) != len(set(result.evidence_ids)):
+                raise ValueError("Repeated evidence IDs in report result")
+
+        # A subject should appear at most once in a ranking.
+        ranked_subjects = [
+            entry.subject.casefold() for entry in self.ranking
+        ]
+
+        if len(ranked_subjects) != len(set(ranked_subjects)):
+            raise ValueError("Ranking subjects must be unique")
+
+        # A completed ranking must account for every requested subject.
+        # A degraded report may rank a subset and explain the omissions.
+        if (
+            self.mode == "rank"
+            and self.status == "completed"
+            and set(ranked_subjects) != known_subjects
+        ):
+            raise ValueError(
+                "Completed ranking must include every report subject"
+            )
+
+        if len(self.citations) != len(set(self.citations)):
+            raise ValueError("Report citations must be unique")
+
+        if self.status == "degraded" and not self.limitations:
+            raise ValueError("Degraded reports must explain limitations")
+
+        return self
+
+def validate_report_against_bundle(
+    report: FinalReport,
+    bundle: ResearchBundle,
+) -> FinalReport:
+    """Validate report references against the collected research artifacts.
+
+    This checks reference integrity. It does not establish whether a
+    source is truthful or whether its text supports a particular claim.
+    """
+
+    # Revalidate snapshots because model fields may have been modified
+    # after their initial construction.
+    report = FinalReport.model_validate(report.model_dump())
+    bundle = ResearchBundle.model_validate(bundle.model_dump())
+
+    known_sources = {
+        source.source_id for source in bundle.sources
+    }
+    evidence_by_id = {
+        item.evidence_id: item for item in bundle.evidence
+    }
+
+    # Bibliography entries must resolve to collected sources.
+    unknown_sources = set(report.citations) - known_sources
+
+    if unknown_sources:
+        raise ValueError(
+            f"Report cites unknown sources: {sorted(unknown_sources)}"
+        )
+
+    # Collect evidence references from every structured report section.
+    referenced_evidence = {
+        evidence_id
+        for result in [
+            *report.comparison_rows,
+            *report.ranking,
+            *report.findings,
+        ]
+        for evidence_id in result.evidence_ids
+    }
+
+    unknown_evidence = referenced_evidence - set(evidence_by_id)
+
+    if unknown_evidence:
+        raise ValueError(
+            f"Report cites unknown evidence: {sorted(unknown_evidence)}"
+        )
+
+    # Every referenced evidence item's source must also appear
+    # in the report's bibliography.
+    required_sources = {
+        evidence_by_id[evidence_id].source_id
+        for evidence_id in referenced_evidence
+    }
+    missing_citations = required_sources - set(report.citations)
+
+    if missing_citations:
+        raise ValueError(
+            "Report bibliography is missing sources: "
+            f"{sorted(missing_citations)}"
+        )
+
+    return report

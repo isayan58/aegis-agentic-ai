@@ -1,7 +1,7 @@
 # Aegis AI — Day-wise Planner
 
 **Sprint:** Day 1 (Nov 17, 2026) → Day 15 (Dec 1, 2026)
-**Last updated:** Nov 17, 2026
+**Last updated:** Nov 19, 2026
 **Tracker:** [GitHub milestones](https://github.com/isayan58/aegis-agentic-ai/milestones) · [Issues](https://github.com/isayan58/aegis-agentic-ai/issues). Each `#NN` below is a GitHub issue.
 **Design:** general-purpose research assistant. Aegis takes a research request (research, compare or rank), asks for clarification when the request is incomplete, collects sourced evidence, verifies it, asks a human for approval, and returns a cited report. The design works for any subject: football players, data platforms or anything else.
 
@@ -25,6 +25,17 @@ Each open step in Days 1–10 is one GitHub issue, with:
 - **Tasks:** small checkboxes, about 15–30 min each
 - **Files:** where the code goes
 - **Done when:** the check that proves the step is finished
+
+### Evaluation tooling
+
+| Tool | Used for | From | Rule |
+|---|---|---|---|
+| Own runner (`evals/runner.py`) | Deterministic cases, the CI gate, the official results | Day 2 | Every result in `evals/results/` comes from here |
+| LangSmith | Tracing graph runs; inspecting experiments A/B/C | Day 3 (#23), Day 9 (#51) | For inspecting runs only, not the record of results. Only fictional or test data is traced. Off in tests. |
+| Ragas | Faithfulness, answer relevance, context precision | Day 13 (#76) | Judge model comes from `get_model("judge")`; tests marked `live` |
+| DeepEval | Not used | — | Overlaps with Ragas and the judge role; revisit only if Ragas falls short |
+
+Recall@k and MRR (Day 12) are written in our own code; they don't need a library.
 
 ---
 
@@ -287,8 +298,12 @@ Suggested order: #20 → #21 → #9 → #10 → #11 → #12 → #13. Cost calcul
 - [ ] Check the output with `validate_report_against_bundle`
 - [ ] Wrap it as `run_baseline(request) -> FinalReport`
 - [ ] Add a live test (`@pytest.mark.live`) for one request, with a small budget cap
+- [ ] LangSmith tracing: add `LANGSMITH_TRACING`, `LANGSMITH_API_KEY` and `LANGSMITH_PROJECT=aegis-dev` to `.env`, and placeholders to `.env.example`
+- [ ] Load them into the process environment in the notebook (e.g. `load_dotenv()`). pydantic-settings reads `.env` but doesn't export it, and LangChain reads `os.environ`.
+- [ ] Force `LANGSMITH_TRACING=false` in `tests/conftest.py`, so tests and CI never send traces
+- [ ] Open the baseline run in LangSmith and check that its tool calls, tokens and latency match what you printed
 
-**Files:** `src/aegis/graphs/baseline.py`, `tests/test_baseline_live.py`, notebook `03_single_agent_baseline`
+**Files:** `src/aegis/graphs/baseline.py`, `tests/test_baseline_live.py`, `tests/conftest.py`, `.env.example`, notebook `03_single_agent_baseline`
 **Done when:** both demo requests return a valid, cited report, and you know the cost and number of tool calls for each.
 
 ### #24 · Step 3: Planner
@@ -699,6 +714,8 @@ Suggested order: #20 → #21 → #9 → #10 → #11 → #12 → #13. Cost calcul
 - [ ] Use the same role → model mapping for all three variants
 - [ ] Save each run's result, trajectory, tokens, cost and latency to JSONL
 - [ ] Estimate the total cost before starting (cases × average cost per run)
+- [ ] Tag each run in LangSmith with metadata: `experiment` (A/B/C), `case_id`, dataset hash, so traces can be filtered by variant
+- [ ] Keep the JSONL in `evals/results/` as the record of results; use LangSmith only to inspect runs
 - [ ] Run A, B and C
 
 **Files:** `evals/experiment.py`, `evals/results/`
@@ -863,6 +880,11 @@ Suggested order: #20 → #21 → #9 → #10 → #11 → #12 → #13. Cost calcul
   1. Treat document text as data and never as instructions
   2. Add test documents that contain hidden instructions
 - [ ] **Step 5: RAG evals** (notebook `13_rag_evals`). Faithfulness, answer relevance, context precision, citation accuracy; compare with and without RAG
+  1. Add `ragas` to the dev group with a pinned version
+  2. Pass the judge model from `get_model("judge")` through Ragas's LangChain wrapper, with the usage callbacks from #12 attached, so its calls are costed and use a different provider from the researcher
+  3. Ragas computes faithfulness, answer relevance and context precision; citation accuracy and the "excerpt exists in the chunk" check stay deterministic code
+  4. Mark Ragas tests `live`, so they only run with `--run-live`
+  5. Save the Ragas version and judge model with each result
 - [ ] **Step 6: UI.** Show cited excerpts with their document and page in the report
 
 ---
