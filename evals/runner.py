@@ -5,6 +5,9 @@ import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
+from aegis.nodes.planner import plan_deterministically
+from evals.evaluators import routing_matches
+
 
 from pydantic import ValidationError
 
@@ -82,10 +85,10 @@ def validation_errors(exc: ValidationError) -> list[dict]:
 
 
 def observe(case: EvalCase) -> dict:
-    """Run application behavior without consulting the expected answer."""
+    """Run application behavior without consulting expected answers."""
 
-    # Catch validation errors only at the intended validation boundary.
-    # Errors from unrelated code must not count as a successful rejection.
+    # Validate the actual input. Intentionally invalid cases must
+    # reach this boundary so we can observe their rejection.
     try:
         if case.input.bundle is not None:
             ResearchBundle.model_validate(case.input.bundle)
@@ -98,27 +101,45 @@ def observe(case: EvalCase) -> dict:
             "outcome": "rejected",
             "clarification_fields": [],
             "tool_outputs": [],
+            "workers": [],
             "errors": validation_errors(exc),
         }
 
+    # A structurally valid request may still need clarification.
     fields = []
 
     if request is not None:
         clarification = check_clarity(request)
-        fields = [question.field for question in clarification.questions]
+        fields = [
+            question.field
+            for question in clarification.questions
+        ]
 
     outputs = []
+    workers = []
 
-    # An incomplete request should not proceed to calculation.
+    # Incomplete requests must not proceed to calculations or planning.
     if not fields:
+        # Preserve the original Day 2 calculation checks.
         for call in case.input.tools:
             function = TOOL_FUNCTIONS[call.name]
             outputs.append(function(**call.arguments))
+
+        # Observe the actual deterministic plan.
+        # Do not read case.expected here.
+        if request is not None:
+            plan = plan_deterministically(request)
+
+            workers = [
+                (step.worker, step.subject, step.factor)
+                for step in plan.steps
+            ]
 
     return {
         "outcome": "clarification" if fields else "accepted",
         "clarification_fields": fields,
         "tool_outputs": outputs,
+        "workers": workers,
         "errors": [],
     }
 
@@ -182,6 +203,12 @@ def compare(case: EvalCase, actual: dict) -> list[str]:
                     f"Tool output {index}: expected {wanted}, "
                     f"received {observed}"
                 )
+
+    if expected.workers and not routing_matches(
+        expected.workers,
+        actual.get("workers", []),
+    ):
+        failures.append("Planner worker assignments differ")
 
     return failures
 

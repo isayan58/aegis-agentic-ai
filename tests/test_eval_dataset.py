@@ -10,22 +10,26 @@ from evals.runner import evaluate_case, load_cases, parse_cases
 CASES = load_cases()
 
 
-def test_dataset_has_the_planned_15_cases():
-    """Protect the agreed initial coverage."""
+def test_dataset_has_the_planned_30_cases():
+    """Protect both the original checks and Day 3 coverage."""
 
-    assert len(CASES) == 15
+    assert len(CASES) == 30
 
     assert Counter(case.category for case in CASES) == {
-        "valid": 6,
+        "valid": 21,
         "clarification": 4,
         "invalid": 3,
         "reference": 2,
     }
 
-    assert len({case.id for case in CASES}) == 15
+    assert len({case.id for case in CASES}) == 30
 
-    # Three independently calculated tool expectations are embedded.
+    # Preserve the original three numerical checks.
     assert sum(len(case.input.tools) for case in CASES) == 3
+
+    # Day 3 adds explicit routing and agent-tool expectations.
+    assert sum(bool(case.expected.workers) for case in CASES) == 15
+    assert sum(bool(case.expected.tool_sequence) for case in CASES) == 15
 
 
 @pytest.mark.parametrize("case", CASES, ids=lambda case: case.id)

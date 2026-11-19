@@ -33,6 +33,8 @@ class EvalInput(EvalModel):
     bundle: dict[str, Any] | None = None
 
     tools: list[ToolCall] = Field(default_factory=list)
+    # Identifies the local evidence adapter for live baseline evaluations.
+    dataset_ref: NonEmptyText | None = None
 
 
 class Expected(EvalModel):
@@ -50,6 +52,12 @@ class Expected(EvalModel):
 
     # Numeric results correspond to input.tools in the same order.
     tool_outputs: list[float] = Field(default_factory=list)
+        # Each entry is (worker, subject, factor).
+    # These expectations are never passed to the agent.
+    workers: list[tuple[str, str, str]] = Field(default_factory=list)
+
+    # Expected research/calculation calls, excluding FinalReport submission.
+    tool_sequence: list[NonEmptyText] = Field(default_factory=list)
 
 
 class EvalCase(EvalModel):
