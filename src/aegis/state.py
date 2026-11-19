@@ -18,6 +18,7 @@ from aegis.schemas import (
     ResearchFinding,
     ResearchRequest,
     SourceRecord,
+    ResearchPlan
 )
 
 
@@ -43,7 +44,8 @@ class AegisState(TypedDict, total=False):
 
     # These contracts will become specific Pydantic models when
     # we implement planning, verification, approval, and reporting.
-    plan: list[dict[str, object]]
+    # The planner now has a concrete, validated output contract.
+    plan: ResearchPlan
     verification: dict[str, object] | None
     approval: dict[str, object] | None
     report: dict[str, object] | None
@@ -88,6 +90,9 @@ class AegisState(TypedDict, total=False):
         list[dict[str, object]],
         append,
     ]
+
+    # Untrusted input enters here; validation produces request.
+    raw_request: object
 
 
 def make_evidence_id(
