@@ -2,6 +2,7 @@
 
 from datetime import date
 from typing import Annotated, Literal
+from graphlib import CycleError, TopologicalSorter
 
 from pydantic import (
     AwareDatetime,
@@ -410,3 +411,146 @@ def validate_report_against_bundle(
         )
 
     return report
+
+
+class PlanStep(BaseModel):
+    """One task assigned to a worker, with explicit prerequisites."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    step_id: NonEmptyText
+    worker: Literal["evidence", "web", "analysis"]
+    subject: NonEmptyText
+    factor: NonEmptyText
+
+    # These are task IDs, not evidence IDs.
+    # An empty list means the task has no prerequisites.
+    depends_on: list[NonEmptyText] = Field(default_factory=list)
+
+
+class ResearchPlan(BaseModel):
+    """A collection of tasks with a valid dependency structure."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    steps: list[PlanStep] = Field(min_length=1, max_length=150)
+    rationale: NonEmptyText
+
+    @model_validator(mode="after")
+    def validate_dependencies(self):
+        """Reject ambiguous IDs, broken dependencies and cycles."""
+
+        step_ids = [step.step_id for step in self.steps]
+
+        if len(step_ids) != len(set(step_ids)):
+            raise ValueError("Plan step IDs must be unique")
+
+        steps_by_id = {
+            step.step_id: step
+            for step in self.steps
+        }
+
+        for step in self.steps:
+            if len(step.depends_on) != len(set(step.depends_on)):
+                raise ValueError(
+                    f"Step {step.step_id} repeats dependencies"
+                )
+
+            if step.step_id in step.depends_on:
+                raise ValueError(
+                    f"Step {step.step_id} depends on itself"
+                )
+
+            unknown = set(step.depends_on) - set(steps_by_id)
+
+            if unknown:
+                raise ValueError(
+                    f"Step {step.step_id} has unknown dependencies: "
+                    f"{sorted(unknown)}"
+                )
+
+        # A cycle would make tasks wait on one another forever.
+        # Example: task A requires B, while B requires A.
+        dependency_graph = {
+            step.step_id: set(step.depends_on)
+            for step in self.steps
+        }
+
+        try:
+            tuple(TopologicalSorter(dependency_graph).static_order())
+        except CycleError:
+            raise ValueError("Plan contains a dependency cycle") from None
+
+        for step in self.steps:
+            if step.worker != "analysis":
+                continue
+
+            # For this first planner, analysis must directly depend
+            # on retrieval for the same subject and factor.
+            # Either a dataset worker or a web worker can supply it.
+            has_matching_evidence = any(
+                steps_by_id[dependency].worker in {"evidence", "web"}
+                and steps_by_id[dependency].subject.casefold()
+                == step.subject.casefold()
+                and steps_by_id[dependency].factor.casefold()
+                == step.factor.casefold()
+                for dependency in step.depends_on
+            )
+
+            if not has_matching_evidence:
+                raise ValueError(
+                    f"Analysis step {step.step_id} requires matching "
+                    "evidence or web dependency"
+                )
+
+        return self
+
+def validate_plan_against_request(
+    plan: ResearchPlan,
+    request: ResearchRequest,
+) -> ResearchPlan:
+    """Require retrieval coverage for every requested subject/factor."""
+
+    # Revalidate snapshots in case objects changed after construction.
+    plan = ResearchPlan.model_validate(plan.model_dump())
+    request = ResearchRequest.model_validate(request.model_dump())
+
+    if not request.factors:
+        raise ValueError("Clarify research factors before planning")
+
+    # Cartesian product: every subject paired with every factor.
+    expected_pairs = {
+        (subject.casefold(), factor.casefold())
+        for subject in request.subjects
+        for factor in request.factors
+    }
+
+    all_pairs = {
+        (step.subject.casefold(), step.factor.casefold())
+        for step in plan.steps
+    }
+
+    # A planner must not silently expand the user's research scope.
+    unexpected = all_pairs - expected_pairs
+
+    if unexpected:
+        raise ValueError(
+            f"Plan contains unrequested subject/factor pairs: "
+            f"{sorted(unexpected)}"
+        )
+
+    retrieval_pairs = {
+        (step.subject.casefold(), step.factor.casefold())
+        for step in plan.steps
+        if step.worker in {"evidence", "web"}
+    }
+
+    # An analysis task alone does not count as evidence collection.
+    missing = expected_pairs - retrieval_pairs
+
+    if missing:
+        raise ValueError(
+            f"Plan is missing evidence collection for: {sorted(missing)}"
+        )
+
+    return plan
