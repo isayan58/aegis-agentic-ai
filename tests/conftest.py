@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from aegis.config import get_settings
@@ -27,6 +29,11 @@ def pytest_collection_modifyitems(config, items):
 def isolate_test_state(monkeypatch):
     monkeypatch.setenv("LANGSMITH_TRACING", "false")
     monkeypatch.setenv("LANGCHAIN_TRACING_V2", "false")
+
+    # Role overrides in the shell must not change what offline tests expect.
+    for name in list(os.environ):
+        if name.upper().startswith("ROLE_MODELS__"):
+            monkeypatch.delenv(name)
 
     get_settings.cache_clear()
     yield
